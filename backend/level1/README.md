@@ -1,24 +1,42 @@
-# Level 1
+# level 1 - Python Backend
 
-We are building an e-commerce website. Our customers can:
-  - add articles to a virtual cart
-  - checkout the cart contents
-  - get it delivered the next day
+Uma API escrita em Python/Flask para o Desafio JoyJet.
 
-The customer is charged the sum of the prices of each article in their cart.
+Com base em um POST JSON como o encontrado em rules/data.json , retorna uma resposta semelhante à rules/output.json.
 
-Write an API that receives a payload like `data.json` and responds as `output.json`.
+Basicamente calcula o preço de cada item e totaliza cada carrinho.
 
 
-## Tips:
-- Prices are expressed in cents.
-- The customer can send one or more `carts`
-- The articles is like a MAP for your calculation
-- Enjoy while do it :)
+## Instalação
+Crie um clone, baixe ou copie esse repositório.
 
+Todos os comandos devem ser enviados à partir da pasta raiz do projeto.
 
-## We lovely to see:
-- Clean structure
-- Clean code
-- Unit tests
-- Good documentation describing `how the project works and how to run then`.
+Instale as dependências com:
+```
+pip3 install requirements.txt
+```
+
+Rode a aplicação com:
+```
+flask run
+```
+
+Por padrão a aplicação será servida em localhost (127.0.0.1) na porta
+5000. Essa porta, o modo de Debug e o ambiente utilizado podem ser configurados no arquivo .flaskenv
+
+## Utilização
+Faça um post JSON no formato encontrado em rules/data.json, utilizando um método POST na URL:
+```
+localhost:5050/
+```
+
+Será retornado uma resposta com o total de cada carrinho de compras.
+
+## Testes
+Foi implementada uma rotina de testes que pode ser alterada para incluir testes mais complexos da aplicação.
+
+Rode os testes com:
+```
+python3 tests.py
+```
