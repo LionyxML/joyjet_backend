@@ -5,13 +5,11 @@ from flask import Flask, jsonify, request
 app = Flask(__name__)
 
 
-# App routes & main functionality
-@app.route("/", methods=["POST"])
-def proccess_post():
-    """ Calculates the total value for n carts based on articles prices"""
-    msg = request.json
-    resp = {"carts": []}
-
+# Utilitary functions
+def carts_total(msg, resp):
+    """ Given the API expected json msg input and the expected resp(onse),
+        calculates all carts totals
+    """
     for cart in msg["carts"]:
         cart_value = 0
 
@@ -26,7 +24,18 @@ def proccess_post():
 
         resp["carts"].append({"id": cart["id"], "total": cart_value})
 
-    return jsonify(resp), 200
+    return resp
+
+
+# App routes & main functionality
+@app.route("/", methods=["POST"])
+def proccess_post():
+    """ Receives the requested input and passes to the utilitary carts_total
+        function.
+    """
+    msg = request.json
+    resp = {"carts": []}
+    return jsonify(carts_total(msg, resp)), 200
 
 
 @app.errorhandler(Exception)
