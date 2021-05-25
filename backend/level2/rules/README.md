@@ -1,19 +1,17 @@
-# Level 1
+# Level 2
 
-We are building an e-commerce website. Our customers can:
-  - add articles to a virtual cart
-  - checkout the cart contents
-  - get it delivered the next day
+Cost of delivery depends on how much we charged the custormer for their cart’s contents
+The more the customer spends, the less they are charged for shipping.
 
-The customer is charged the sum of the prices of each article in their cart.
 
 Write an API that receives a payload like `data.json` and responds as `output.json`.
 
 
 ## Tips:
 - Prices are expressed in cents.
-- The customer can send one or more `carts`
-- The articles is like a MAP for your calculation
+- The customer can send one or more `carts`.
+- The articles is like a MAP for your calculation.
+- Pay attention to fees
 - Enjoy while do it :)
 
 
