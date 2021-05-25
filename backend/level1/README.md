@@ -28,7 +28,7 @@ Por padrão a aplicação será servida em localhost (127.0.0.1) na porta
 ## Utilização
 Faça um post JSON no formato encontrado em rules/data.json, utilizando um método POST na URL:
 ```
-localhost:5050/
+localhost:5000/
 ```
 
 Será retornado uma resposta com o total de cada carrinho de compras.
