@@ -6,10 +6,13 @@ app = Flask(__name__)
 
 
 # Utilitary functions
-def carts_total(msg, resp):
+def carts_totalize(msg):
     """ Given the API expected json msg input and the expected resp(onse),
         calculates all carts totals
     """
+
+    resp = {"carts": []}
+
     for cart in msg["carts"]:
         cart_value = 0
 
@@ -27,6 +30,30 @@ def carts_total(msg, resp):
     return resp
 
 
+def carts_apply_delivery(carts_totalized, fees):
+    """ Given totalized cart values, calculates delivery fees and adds to
+        the total price
+    """
+
+    resp = {"carts": []}
+
+    for cart in carts_totalized["carts"]:
+        for fee in fees:
+            lower_value = fee["eligible_transaction_volume"]["min_price"]
+
+            if fee["eligible_transaction_volume"]["max_price"] != None:
+                higher_value = fee["eligible_transaction_volume"]["max_price"]
+            else:
+                higher_value = cart["total"] + 1
+
+            if cart["total"] >=  lower_value and cart["total"] < higher_value :
+                delivery_fee = fee["price"]
+
+        resp["carts"].append({"id": cart["id"], "total": cart["total"] + delivery_fee })
+
+    return resp
+
+
 # App routes & main functionality
 @app.route("/", methods=["POST"])
 def proccess_post():
@@ -34,14 +61,16 @@ def proccess_post():
         function.
     """
     msg = request.json
-    resp = {"carts": []}
-    return jsonify(carts_total(msg, resp)), 200
+    carts_total = carts_totalize(msg)
+    carts_total_plus_delivery = carts_apply_delivery(carts_total, msg["delivery_fees"])
+
+    return jsonify(carts_total_plus_delivery), 200
 
 
 @app.errorhandler(Exception)
 def exception_handler(e):
     """ Raise API Errors. """
-    msg = { "error": "Internal Server Error"}
+    msg = { "error": "Internal Server Error " + str(e) }
     try:
         code_error = e.code
         msg["error"] = str(e)
