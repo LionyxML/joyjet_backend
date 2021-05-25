@@ -46,7 +46,7 @@ class PriceCase(unittest.TestCase):
                 {
                     "eligible_transaction_volume": {
                         "min_price": 2000,
-                        "max_price": None,
+                        "max_price": None
                     },
                     "price": 0,
                 },
