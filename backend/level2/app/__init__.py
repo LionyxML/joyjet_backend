@@ -46,10 +46,10 @@ def carts_apply_delivery(carts_totalized, fees):
             else:
                 higher_value = cart["total"] + 1
 
-            if cart["total"] >=  lower_value and cart["total"] < higher_value :
+            if cart["total"] >= lower_value and cart["total"] < higher_value:
                 delivery_fee = fee["price"]
 
-        resp["carts"].append({"id": cart["id"], "total": cart["total"] + delivery_fee })
+        resp["carts"].append({"id": cart["id"], "total": cart["total"] + delivery_fee})
 
     return resp
 
@@ -70,7 +70,7 @@ def proccess_post():
 @app.errorhandler(Exception)
 def exception_handler(e):
     """ Raise API Errors. """
-    msg = { "error": "Internal Server Error " + str(e) }
+    msg = {"error": "Internal Server Error " + str(e)}
     try:
         code_error = e.code
         msg["error"] = str(e)
@@ -78,6 +78,7 @@ def exception_handler(e):
         code_error = 500
 
     return jsonify(msg), code_error
+
 
 # App init
 if __name__ == "__main__":
