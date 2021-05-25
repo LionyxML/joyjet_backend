@@ -4,7 +4,7 @@ Uma API escrita em Python/Flask para o Desafio JoyJet.
 
 Com base em um POST JSON como o encontrado em rules/data.json , retorna uma resposta semelhante à rules/output.json.
 
-Basicamente calcula o preço de cada item, adiciona uma taxa de entrega e totaliza cada carrinho.
+Calcula o preço de cada item, calcula um desconto  por item, adiciona a taxa de entrega e totaliza cada carrinho.
 
 
 ## Instalação

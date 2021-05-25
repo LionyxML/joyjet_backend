@@ -6,12 +6,37 @@ app = Flask(__name__)
 
 
 # Utilitary functions
+def apply_discount(articles, discounts):
+    """ Given a dict of articles and a dict of discounts, calculates each
+        article new price
+    """
+
+    for discount in discounts:
+        if discount["type"] == "amount":
+            articles[discount["article_id"] - 1]["price"] = (
+                next(
+                    (sub for sub in articles if sub["id"] == discount["article_id"]),
+                    None,
+                )["price"]
+                - discount["value"]
+            )
+
+        if discount["type"] == "percentage":
+            articles[discount["article_id"] - 1]["price"] = next(
+                (sub for sub in articles if sub["id"] == discount["article_id"]), None,
+            )["price"] * (1 - discount["value"] / 100.0)
+
+    return articles
+
+
 def carts_totalize(msg):
     """ Given the API expected json msg input and the expected resp(onse),
-        calculates all carts totals
+        calculates all carts totals, consedering individual articles discounts
     """
 
     resp = {"carts": []}
+
+    prices = apply_discount(msg["articles"], msg["discounts"])
 
     for cart in msg["carts"]:
         cart_value = 0
@@ -20,8 +45,7 @@ def carts_totalize(msg):
             cart_value += (
                 item["quantity"]
                 * next(
-                    (sub for sub in msg["articles"] if sub["id"] == item["article_id"]),
-                    None,
+                    (sub for sub in prices if sub["id"] == item["article_id"]), None,
                 )["price"]
             )
 
@@ -46,10 +70,10 @@ def carts_apply_delivery(carts_totalized, fees):
             else:
                 higher_value = cart["total"] + 1
 
-            if cart["total"] >=  lower_value and cart["total"] < higher_value :
+            if cart["total"] >= lower_value and cart["total"] < higher_value:
                 delivery_fee = fee["price"]
 
-        resp["carts"].append({"id": cart["id"], "total": cart["total"] + delivery_fee })
+        resp["carts"].append({"id": cart["id"], "total": cart["total"] + delivery_fee})
 
     return resp
 
@@ -70,7 +94,7 @@ def proccess_post():
 @app.errorhandler(Exception)
 def exception_handler(e):
     """ Raise API Errors. """
-    msg = { "error": "Internal Server Error " + str(e) }
+    msg = {"error": "Internal Server Error " + str(e)}
     try:
         code_error = e.code
         msg["error"] = str(e)
@@ -78,6 +102,7 @@ def exception_handler(e):
         code_error = 500
 
     return jsonify(msg), code_error
+
 
 # App init
 if __name__ == "__main__":
